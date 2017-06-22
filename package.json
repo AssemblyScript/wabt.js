@@ -7,16 +7,16 @@
     "type": "git",
     "url": "https://github.com/dcodeIO/wabt.js.git"
   },
-  "keywords":[
+  "keywords": [
     "webassembly",
     "wasm"
   ],
   "main": "index.js",
   "typings": "index.d.ts",
-  "scripts":{
+  "scripts": {
     "build": "node scripts/build"
   },
-  "files":[
+  "files": [
     "index.js",
     "index.d.ts",
     "package.json",
