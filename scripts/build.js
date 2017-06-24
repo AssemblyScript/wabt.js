@@ -7,8 +7,11 @@ var source = fs.readFileSync(__dirname + "/../wabt/demo/libwabt.js").toString()
   .trim()
   .replace(/;$/, "");
 
-// Append a CommonJS shim that doesn't conflict with the global 'wabt' var
-source += ";\n\nif(\"undefined\"!=typeof module&&module&&module.exports)module.exports=wabt;";
+// Append an UMD shim that doesn't conflict with the global 'wabt' var
+source += "\n\n" + [
+  'if("undefined"!=typeof module&&module&&module.exports)module.exports=wabt;',
+  'else if("function"==typeof define&&define.amd)define(function(){return wabt});'
+].join("");
 
 // And save it back
 fs.writeFileSync(__dirname + "/../index.js", source, "utf8");
