@@ -1,9 +1,9 @@
 wabt.js
 =======
 
-[![npm](https://img.shields.io/npm/v/wabt.svg)](https://www.npmjs.com/package/wabt)
+**wabt.js** is a port of [WABT](https://github.com/WebAssembly/wabt), the WebAssembly Binary Toolkit, to the Web.
 
-JavaScript version of [WABT](https://github.com/WebAssembly/wabt), the WebAssembly Binary Toolkit.
+[![npm](https://img.shields.io/npm/v/wabt.svg)](https://www.npmjs.com/package/wabt) [![npm](https://img.shields.io/npm/v/wabt/nightly.svg)](https://www.npmjs.com/package/wabt)
 
 Usage
 -----
