@@ -1,11 +1,11 @@
 {
   "name": "wabt",
-  "description": "JavaScript version of WABT, The WebAssembly Binary Toolkit, with TypeScript support.",
+  "description": "JavaScript version of WABT, The WebAssembly Binary Toolkit.",
   "version": "0.0.13",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dcodeIO/wabt.js.git"
+    "url": "https://github.com/AssemblyScript/wabt.js.git"
   },
   "keywords": [
     "webassembly",
