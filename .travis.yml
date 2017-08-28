@@ -1,0 +1,110 @@
+language: cpp
+dist: trusty # Note that trusty instances are limited to 2 cores, max. 4 gb of memory and 20 gb of hard disk space.
+compiler: clang
+git:
+  submodules: false
+cache:
+  ccache: true
+  directories:
+  - $HOME/.emscripten_cache
+env:
+  global:
+  - MAKEFLAGS="-j2"
+  - CFLAGS="-Qunused-arguments -fcolor-diagnostics -fuse-ld=gold"
+  - CXXFLAGS="-Qunused-arguments -fcolor-diagnostics -fuse-ld=gold"
+  - CCACHE_SLOPPINESS="pch_defines,time_macros"
+  - CCACHE_COMPRESS=1
+  - CCACHE_HARDLINK=1
+  - CCACHE_MAXSIZE="256m"
+  - EMSDK="$HOME/emsdk-portable"
+  - EMSCRIPTEN_VERSION="incoming"
+  - CLANG_VERSION="incoming"
+  - PATH="$HOME/cmake-3.8.2-Linux-x86_64/bin:$EMSDK:$PATH"
+
+install: # install cmake, emsdk-portable and node.js
+- wget --no-check-certificate -qO- https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.tar.gz | tar -xzC $HOME &&
+  wget --no-check-certificate -qO- https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz | tar -xzC $HOME &&
+  nvm install 8
+
+before_script: # setup ccache, git and emscripten
+- ccache -z -M $CCACHE_MAXSIZE &&
+  ccache -s
+- git config --global user.email "travis@travis-ci.org" &&
+  git config --global user.name "Travis CI" &&
+  git config credential.helper "store --file=.git/credentials" &&
+  echo "https://${GH_TOKEN}:@github.com" > .git/credentials &&
+  echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > $HOME/.npmrc
+- export CC="ccache clang" &&
+  export CXX="ccache clang++" &&
+  export LD="ld.gold" &&
+  export RC=1
+- emsdk update-tags &&
+  timeout 30m
+  emsdk install -j2 --build=Release --disable-assertions clang-${CLANG_VERSION}-64bit &&
+  emsdk install -j2 emscripten-${EMSCRIPTEN_VERSION}-64bit &&
+  emsdk activate --build=Release clang-${CLANG_VERSION}-64bit &&
+  emsdk activate emscripten-${EMSCRIPTEN_VERSION}-64bit &&
+  export EMSCRIPTEN=${EMSCRIPTEN_ROOT} &&
+  git checkout master &&
+  git submodule update --init --remote --merge;
+  export RC=$?;
+  $(exit 0)
+
+script: # build wabt.js
+- if [ $RC -eq 0 ]; then
+    source $EMSDK/emsdk_env.sh &&
+    cd ./wabt &&
+    export EMSCRIPTEN_DIR=${EMSCRIPTEN_ROOT} &&
+    ln -s ${EMSCRIPTEN_ROOT} emscripten &&
+    make emscripten-release &&
+    cp ./out/emscripten/Release/libwabt.js ../index.js &&
+    cd .. &&
+    npm install &&
+    npm test;
+    export RC=$?;
+  fi;
+  $(exit $RC)
+
+before_cache: # print ccache statistics
+- ccache -s
+
+# --- everything below happens after the cache has been updated ---
+
+after_failure: # trigger continuation if (and only if) the build timed out
+- if [ $RC -eq 124 ]; then
+    git checkout master &&
+    git commit --allow-empty -m "Build continuation notification" &&
+    git push -u origin master;
+  fi
+
+after_success: # push to github and publish on npm (intentionally fails for duplicates)
+- RELEASE_VERSION=`node scripts/version` &&
+  NIGHTLY_VERSION=$RELEASE_VERSION"-nightly."`date -u +"%Y%m%d"` &&
+  echo "RELEASE_VERSION=${RELEASE_VERSION} / NIGHTY_VERSION=${NIGHTY_VERSION}"
+#   git add ./wabt &&
+#   git add ./index.js &&
+#   if
+#     npm version $RELEASE_VERSION --no-git-tag-version --force;
+#   then
+#     VERSION=$RELEASE_VERSION &&
+#     IS_NIGHTLY=0 &&
+#     git add ./package.json &&
+#     git add ./package-lock.json &&
+#     echo "Committing release ("$VERSION") ...";
+#   else
+#     npm version $NIGHTLY_VERSION --no-git-tag-version --force &&
+#     VERSION=$NIGHTLY_VERSION &&
+#     IS_NIGHTLY=1 &&
+#     echo "Committing nightly ("$VERSION") ...";
+#   fi &&
+#   git commit -m "Build ""#"$TRAVIS_BUILD_NUMBER" (v"$VERSION") [ci skip]" &&
+#   git push -u origin master &&
+#   git tag "v"$VERSION &&
+#   git push -u origin "v"$VERSION &&
+#   if [ $IS_NIGHTLY -eq 1 ]; then
+#     echo "Publishing nightly ..." &&
+#     npm publish --tag nightly;
+#   else
+#     echo "Publishing release ..." &&
+#     npm publish;
+#   fi

@@ -1,32 +1,32 @@
-export interface IReadWasmOptions {
+export interface ReadWasmOptions {
   readDebugNames?: boolean;
 }
 
-export interface IToTextOptions {
+export interface ToTextOptions {
   foldExprs?: boolean;
   inlineExport?: boolean;
 }
 
-export interface IToBinaryOptions {
+export interface ToBinaryOptions {
   log?: boolean;
   canonicalize_lebs?: boolean;
   relocatable?: boolean;
   write_debug_names?: boolean;
 }
 
-export interface IToBinaryResult {
+export interface ToBinaryResult {
   buffer: Uint8Array;
   log: string;
 }
 
 export function parseWast(filename: string, buffer: string | Uint8Array): WasmModule;
-export function readWasm(buffer: Uint8Array, options: IReadWasmOptions): WasmModule;
+export function readWasm(buffer: Uint8Array, options: ReadWasmOptions): WasmModule;
 
 export class WasmModule {
   constructor(module_addr: number);
   generateNames(): void;
   applyNames(): void;
-  toText(options: IToTextOptions): string;
-  toBinary(options: IToBinaryOptions): IToBinaryResult;
+  toText(options: ToTextOptions): string;
+  toBinary(options: ToBinaryOptions): ToBinaryResult;
   destroy(): void;
 }

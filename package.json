@@ -14,7 +14,8 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "node scripts/build"
+    "build": "node scripts/build",
+    "test": "node tests"
   },
   "files": [
     "index.js",
@@ -22,5 +23,8 @@
     "package.json",
     "package-lock.json",
     "README.md"
-  ]
+  ],
+  "devDependencies": {
+    "simple-git": "^1.75.0"
+  }
 }

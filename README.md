@@ -1,9 +1,9 @@
 wabt.js
 =======
 
-**wabt.js** is a port of [WABT](https://github.com/WebAssembly/wabt), the WebAssembly Binary Toolkit, to the Web.
+**wabt.js** is a port of [WABT](https://github.com/WebAssembly/wabt) to the Web, allowing you to manipulate WebAssembly modules using a JavaScript API.
 
-[![npm](https://img.shields.io/npm/v/wabt.svg)](https://www.npmjs.com/package/wabt) [![npm](https://img.shields.io/npm/v/wabt/nightly.svg)](https://www.npmjs.com/package/wabt)
+[![npm](https://img.shields.io/npm/v/wabt.svg)](https://www.npmjs.com/package/wabt) [![npm](https://img.shields.io/npm/v/wabt/nightly.svg)](https://www.npmjs.com/package/wabt) [![Build Status](https://travis-ci.org/AssemblyScript/wabt.js.svg?branch=master)](https://travis-ci.org/AssemblyScript/wabt.js)
 
 Usage
 -----
@@ -24,6 +24,14 @@ var wast = myModule.toText({ foldExprs: false, inlineExport: false });
 
 console.log(wast);
 ```
+
+The buildbot also publishes nightly versions once a day. The latest nightly can be installed through
+
+```
+$> npm install wabt@nightly
+```
+
+or you can use one of the [previous versions](https://github.com/AssemblyScript/wabt.js/tags) instead if necessary.
 
 API
 ---
