@@ -54,8 +54,7 @@ script: # build wabt.js
 - if [ $RC -eq 0 ]; then
     source $EMSDK/emsdk_env.sh &&
     cd ./wabt &&
-    export EMSCRIPTEN_DIR=${EMSCRIPTEN_ROOT} &&
-    ln -s ${EMSCRIPTEN_ROOT} emscripten &&
+    export EMSCRIPTEN_DIR=${EMSCRIPTEN} &&
     make emscripten-release &&
     cp ./out/emscripten/Release/libwabt.js ../index.js &&
     cd .. &&

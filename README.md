@@ -38,7 +38,7 @@ API
 
 * **parseWast**(filename: `string`, buffer: `string | Uint8Array`): `WasmModule`<br />
   Parses a wast source to a module.
-* **readWasm**(buffer: `Uint8Array`, options: `IReadWasmOptions`): `WasmModule`<br />
+* **readWasm**(buffer: `Uint8Array`, options: `ReadWasmOptions`): `WasmModule`<br />
   Reads a wasm binaryen to a module.
 
 * **WasmModule**<br />
@@ -48,26 +48,26 @@ API
     Generates textual names for function types, globals, labels etc.
   * **applyNames**(): `void`<br />
     Applies textual names.
-  * **toText**(options: `IToTextOptions`): `string`<br />
+  * **toText**(options: `ToTextOptions`): `string`<br />
     Converts the module to wast text format.
-  * **toBinary**(options: `IToBinaryOptions`): `IToBinaryResult`<br />
+  * **toBinary**(options: `ToBinaryOptions`): `ToBinaryResult`<br />
     Converts the module to a wasm binary.
   * **destroy**(): `void`<br />
     Disposes the module and frees its resources.
 
-* **IReadWasmOptions**<br />
+* **ReadWasmOptions**<br />
   Options modifying the behavior of `readWasm`.
 
    * **readDebugNames**: `boolean`<br />
      Reads textual names from the name section.
 
-* **IToTextOptions**<br />
+* **ToTextOptions**<br />
   Options modifying the behavior of `WasmModule#toText`.
 
   * **foldExprs**: `boolean`
   * **inlineExport**: `boolean`
 
-* **IToBinaryOptions**<br />
+* **ToBinaryOptions**<br />
   Options modifying the behavior of `WasmModule#toBinary`.
 
   * **log**: `boolean`
@@ -75,7 +75,7 @@ API
   * **relocatable**: `boolean`
   * **write_debug_names**: `boolean`
 
-* **IToBinaryResult**<br />
+* **ToBinaryResult**<br />
   Result object of `WasmModule#toBinary`.
 
   * **buffer**: `Uint8Array`<br />
