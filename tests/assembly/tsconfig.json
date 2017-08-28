@@ -1,0 +1,12 @@
+{
+  "extends": "../../assemblyscript/tsconfig.assembly.json",
+  "include": [
+    "./**/*.ts",
+    "./**/*.as"
+  ],
+  "assembly": {
+    "noRuntime": true,
+    "outFile": "./module.wasm",
+    "textFile": "./module.wast"
+  }
+}

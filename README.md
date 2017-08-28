@@ -25,7 +25,7 @@ var wast = myModule.toText({ foldExprs: false, inlineExport: false });
 console.log(wast);
 ```
 
-The buildbot also publishes nightly versions once a day. The latest nightly can be installed through
+The buildbot also publishes nightly versions once a day if there have been changes. The latest nightly can be installed through
 
 ```
 $> npm install wabt@nightly

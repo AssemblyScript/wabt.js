@@ -25,6 +25,7 @@
     "README.md"
   ],
   "devDependencies": {
-    "simple-git": "^1.75.0"
+    "simple-git": "^1.76.0",
+    "tape": "^4.8.0"
   }
 }

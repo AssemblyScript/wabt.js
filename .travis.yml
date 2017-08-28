@@ -79,31 +79,31 @@ after_failure: # trigger continuation if (and only if) the build timed out
 after_success: # push to github and publish on npm (intentionally fails for duplicates)
 - RELEASE_VERSION=`node scripts/version` &&
   NIGHTLY_VERSION=$RELEASE_VERSION"-nightly."`date -u +"%Y%m%d"` &&
-  echo "RELEASE_VERSION=${RELEASE_VERSION} / NIGHTY_VERSION=${NIGHTY_VERSION}"
-#   git add ./wabt &&
-#   git add ./index.js &&
-#   if
-#     npm version $RELEASE_VERSION --no-git-tag-version --force;
-#   then
-#     VERSION=$RELEASE_VERSION &&
-#     IS_NIGHTLY=0 &&
-#     git add ./package.json &&
-#     git add ./package-lock.json &&
-#     echo "Committing release ("$VERSION") ...";
-#   else
-#     npm version $NIGHTLY_VERSION --no-git-tag-version --force &&
-#     VERSION=$NIGHTLY_VERSION &&
-#     IS_NIGHTLY=1 &&
-#     echo "Committing nightly ("$VERSION") ...";
-#   fi &&
-#   git commit -m "Build ""#"$TRAVIS_BUILD_NUMBER" (v"$VERSION") [ci skip]" &&
-#   git push -u origin master &&
-#   git tag "v"$VERSION &&
-#   git push -u origin "v"$VERSION &&
-#   if [ $IS_NIGHTLY -eq 1 ]; then
-#     echo "Publishing nightly ..." &&
-#     npm publish --tag nightly;
-#   else
-#     echo "Publishing release ..." &&
-#     npm publish;
-#   fi
+  git add ./wabt &&
+  git add ./index.js &&
+  if
+    npm version $RELEASE_VERSION --no-git-tag-version --force;
+  then
+    VERSION=$RELEASE_VERSION &&
+    IS_NIGHTLY=0 &&
+    git add ./package.json &&
+    git add ./package-lock.json &&
+    echo "Committing release ("$VERSION") ...";
+  else
+    npm version $NIGHTLY_VERSION --no-git-tag-version --force &&
+    VERSION=$NIGHTLY_VERSION &&
+    IS_NIGHTLY=1 &&
+    echo "Committing nightly ("$VERSION") ...";
+  fi &&
+  git commit -m "Build ""#"$TRAVIS_BUILD_NUMBER" (v"$VERSION") [ci skip]"
+
+  # git push -u origin master &&
+  # git tag "v"$VERSION &&
+  # git push -u origin "v"$VERSION &&
+  # if [ $IS_NIGHTLY -eq 1 ]; then
+  #   echo "Publishing nightly ..." &&
+  #   npm publish --tag nightly;
+  # else
+  #   echo "Publishing release ..." &&
+  #   npm publish;
+  # fi
