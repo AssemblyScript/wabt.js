@@ -24,6 +24,8 @@
     "README.md"
   ],
   "devDependencies": {
+    "dateformat": "^2.0.0",
+    "semver": "^5.4.1",
     "simple-git": "^1.76.0",
     "tape": "^4.8.0"
   }

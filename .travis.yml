@@ -52,13 +52,28 @@ before_script: # setup ccache, git and emscripten
 
 script: # build wabt.js
 - if [ $RC -eq 0 ]; then
+    npm install &&
+    VERSION=`node scripts/version` &&
+    export VERSION &&
+    if [[ $VERSION != *nightly* ]]; then
+      export RELEASE=1 &&
+      echo "Building release v$VERSION (@$TAG) ...";
+    else
+      unset RELEASE &&
+      echo "Building nightly v$VERSION ...";
+    fi &&
     source $EMSDK/emsdk_env.sh &&
     cd ./wabt &&
-    export EMSCRIPTEN_DIR=${EMSCRIPTEN} &&
+    if [ $RELEASE ]; then
+      TAG=`node ../scripts/version tag` &&
+      echo "Resetting to $TAG ..." &&
+      git reset --hard "$TAG" &&
+      git clean -f;
+    fi &&
+    ln -s $EMSCRIPTEN emscripten &&
     make emscripten-release &&
     cp ./out/emscripten/Release/libwabt.js ../index.js &&
     cd .. &&
-    npm install &&
     npm test;
     export RC=$?;
   fi;
@@ -77,33 +92,28 @@ after_failure: # trigger continuation if (and only if) the build timed out
   fi
 
 after_success: # push to github and publish on npm (intentionally fails for duplicates)
-- RELEASE_VERSION=`node scripts/version` &&
-  NIGHTLY_VERSION=$RELEASE_VERSION"-nightly."`date -u +"%Y%m%d"` &&
-  git add ./wabt &&
+- git add ./wabt &&
   git add ./index.js &&
-  if
-    npm version $RELEASE_VERSION --no-git-tag-version --force;
-  then
-    VERSION=$RELEASE_VERSION &&
-    IS_NIGHTLY=0 &&
+  npm version $VERSION --no-git-tag-version --force &&
+  if [ $RELEASE ]; then
     git add ./package.json &&
     git add ./package-lock.json &&
     echo "Committing release ("$VERSION") ...";
   else
-    npm version $NIGHTLY_VERSION --no-git-tag-version --force &&
-    VERSION=$NIGHTLY_VERSION &&
-    IS_NIGHTLY=1 &&
     echo "Committing nightly ("$VERSION") ...";
   fi &&
-  git commit -m "Build ""#"$TRAVIS_BUILD_NUMBER" (v"$VERSION") [ci skip]"
+  git commit -m "Build ""#"$TRAVIS_BUILD_NUMBER" (v"$VERSION") [ci skip]" &&
+  git push -u origin master &&
+  echo "Creating tag v$VERSION ..." &&
+  git tag "v"$VERSION &&
+  git push -u origin "v"$VERSION &&
+  if [ $RELEASE ]; then
+    echo "Publishing release ..." &&
+    echo "publish skipped";
+  else
+    echo "Publishing nightly ..." &&
+    echo "publish skipped";
+  fi
 
-  # git push -u origin master &&
-  # git tag "v"$VERSION &&
-  # git push -u origin "v"$VERSION &&
-  # if [ $IS_NIGHTLY -eq 1 ]; then
-  #   echo "Publishing nightly ..." &&
-  #   npm publish --tag nightly;
-  # else
-  #   echo "Publishing release ..." &&
-  #   npm publish;
-  # fi
+# npm publish;
+# npm publish --tag nightly;

@@ -1,13 +1,57 @@
-var simpleGit = require("simple-git")(__dirname + "/../.git/modules/wabt");
-simpleGit.tags({ "--sort": "committerdate" }, function(err, tags) {
-  if (err)
-    throw err;
-  for (var i = tags.all.length - 1; i >= 0; --i) {
-    var match = /^(\d+)\.(\d+)\.(\d+)$/.exec(tags.all[i]); // do not match pre-releases
-    if (match) {
-      console.log(match[1] + "." + match[2] + "." + match[3]);
-      return;
-    }
+var simpleGit  = require("simple-git");
+var semver     = require("semver");
+var dateFormat = require('dateformat');
+
+var src = {
+  git: simpleGit(__dirname + "/../wabt"),
+  filter: tag => {
+    var match = /^(\d+\.\d+\.\d+)$/.exec(tag);
+    return match ? {
+      tag: tag,
+      version: match[1]
+    } : null;
   }
-  throw Error("no matching tags");
+};
+
+var dst = {
+  git: simpleGit(__dirname + "/.."),
+  filter: tag => {
+    var match = /^v(\d+\.\d+\.\d+)$/.exec(tag);
+    return match ? {
+      tag: tag,
+      version: match[1]
+    } : null;
+  }
+};
+
+function latest(repo) {
+  return new Promise((resolve, reject) => {
+    repo.git.tags({ "--sort": "-committerdate" }, (err, tags) => {
+      if (err)
+        return reject(err);
+      for (var i = 0; i < tags.all.length; ++i) {
+        var result = repo.filter(tags.all[i]);
+        if (result !== null) {
+          repo.tag = result.tag;
+          repo.version = result.version;
+          return resolve();
+        };
+      }
+      return reject(Error("no matching tags"));
+    });
+  });
+}
+
+Promise.all([
+  latest(src),
+  latest(dst)
+]).then(() => {
+  if (process.argv[2] === "tag")
+    console.log(src.tag);
+  else if (semver.gt(src.version, dst.version))
+    console.log(src.version);
+  else
+    console.log(src.version + "-nightly." + dateFormat(Date.UTC(), "yyyymmdd"));
+}).catch(err => {
+  throw err;
 });
