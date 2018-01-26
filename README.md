@@ -36,20 +36,24 @@ or you can use one of the [previous versions](https://github.com/AssemblyScript/
 API
 ---
 
-* **parseWast**(filename: `string`, buffer: `string | Uint8Array`): `WasmModule`<br />
-  Parses a wast source to a module.
+* **parseWat**(filename: `string`, buffer: `string | Uint8Array`): `WasmModule`<br />
+  Parses a wst source to a module.
 * **readWasm**(buffer: `Uint8Array`, options: `ReadWasmOptions`): `WasmModule`<br />
   Reads a wasm binaryen to a module.
 
 * **WasmModule**<br />
   A class representing a WebAssembly module.
 
+  * **validate**(): `void`<br />
+    Validates the module. Throws if not valid.
+  * **resolveNames**(): `void`<br />
+    Resolves names to indexes.
   * **generateNames**(): `void`<br />
     Generates textual names for function types, globals, labels etc.
   * **applyNames**(): `void`<br />
-    Applies textual names.
+    Applies textual names. Throws on error.
   * **toText**(options: `ToTextOptions`): `string`<br />
-    Converts the module to wast text format.
+    Converts the module to wat text format.
   * **toBinary**(options: `ToBinaryOptions`): `ToBinaryResult`<br />
     Converts the module to a wasm binary.
   * **destroy**(): `void`<br />
