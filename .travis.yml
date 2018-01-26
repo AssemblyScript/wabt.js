@@ -70,9 +70,10 @@ script: # build wabt.js
       git reset --hard "$TAG" &&
       git clean -f;
     fi &&
-    ln -s $EMSCRIPTEN emscripten &&
-    make emscripten-release &&
-    cp ./out/emscripten/Release/libwabt.js ../index.js &&
+    git submodule init &&
+    cmake . -DCMAKE_TOOLCHAIN_FILE="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake" -DCMAKE_BUILD_TYPE=RELEASE &&
+    cmake --build . --config RELEASE --target libwabtjs &&
+    cp ./libwabt.js ../index.js &&
     cd .. &&
     npm test;
     export RC=$?;
