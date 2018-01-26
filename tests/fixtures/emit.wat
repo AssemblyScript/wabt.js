@@ -8,6 +8,6 @@
           (get_local $p1)))
       (unreachable))
     (unreachable))
-  (memory $M0 1)
+  (memory $memory 1)
   (export "add" (func $add))
   (export "memory" (memory 0)))

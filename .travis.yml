@@ -55,7 +55,7 @@ script: # build wabt.js
     npm install &&
     VERSION=`node scripts/version` &&
     export VERSION &&
-    if [[ 0 && $VERSION != *nightly* ]]; then
+    if [[ $VERSION != *nightly* ]]; then
       export RELEASE=1 &&
       echo "Building release v$VERSION ...";
     else
