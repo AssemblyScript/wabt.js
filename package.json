@@ -1,7 +1,7 @@
 {
   "name": "wabt",
   "description": "JavaScript version of WABT, The WebAssembly Binary Toolkit.",
-  "version": "0.0.13",
+  "version": "1.0.0",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -24,9 +24,9 @@
     "README.md"
   ],
   "devDependencies": {
-    "dateformat": "^2.0.0",
-    "semver": "^5.4.1",
-    "simple-git": "^1.76.0",
+    "dateformat": "^2.2.0",
+    "semver": "^5.5.0",
+    "simple-git": "^1.89.0",
     "tape": "^4.8.0"
   }
 }
