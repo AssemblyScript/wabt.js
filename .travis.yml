@@ -24,7 +24,7 @@ env:
   - EMSCRIPTEN="$HOME/emscripten"
   - PATH="$HOME/emscripten:$HOME/cmake/bin:$PATH"
 
-install: # install cmake, emsdk-portable and node.js
+install: # install cmake and node.js
 - mkdir $HOME/cmake && wget -qO- https://cmake.org/files/v3.10/cmake-3.10.1-Linux-x86_64.tar.gz | tar -xzC $HOME/cmake --strip-components 1
 - nvm install 8
 
@@ -65,7 +65,6 @@ script: # build libwabt.js
       unset RELEASE &&
       echo "Building nightly v$VERSION ...";
     fi &&
-    source $EMSDK/emsdk_env.sh &&
     cd ./wabt &&
     if [ $RELEASE ]; then
       TAG=`node ../scripts/version tag` &&
