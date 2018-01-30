@@ -48,6 +48,7 @@ before_script: # setup ccache, git and emscripten
   timeout 30m make -C $HOME/emscripten-fastcomp/build $MAKEFLAGS &&
   emcc -v &&
   emcc -v &&
+  git fetch &&
   git checkout master &&
   git submodule update --init --remote --merge;
   export RC=$?;
@@ -56,6 +57,10 @@ before_script: # setup ccache, git and emscripten
 script: # build libwabt.js
 - if [ $RC -eq 0 ]; then
     npm install &&
+    cd ./wabt &&
+    git fetch &&
+    git submodule init &&
+    cd .. &&
     VERSION=`node scripts/version` &&
     export VERSION &&
     if [[ $VERSION != *nightly* ]]; then
@@ -72,7 +77,6 @@ script: # build libwabt.js
       git reset --hard "$TAG" &&
       git clean -f;
     fi &&
-    git submodule init &&
     cmake . -DCMAKE_TOOLCHAIN_FILE="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake" -DCMAKE_BUILD_TYPE=RELEASE &&
     cmake --build . --config RELEASE --target libwabtjs &&
     cp ./libwabt.js ../index.js &&
