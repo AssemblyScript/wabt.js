@@ -3,55 +3,45 @@ var semver     = require("semver");
 var dateFormat = require('dateformat');
 
 var src = {
-  git: simpleGit(__dirname + "/../wabt"),
+  path: __dirname + "/../wabt",
   filter: tag => {
     var match = /^(\d+\.\d+\.\d+)$/.exec(tag);
-    return match ? {
-      tag: tag,
-      version: match[1]
-    } : null;
+    return match ? { tag: tag, version: match[1] } : null;
   }
 };
 
 var dst = {
-  git: simpleGit(__dirname + "/.."),
+  path: __dirname + "/..",
   filter: tag => {
     var match = /^v(\d+\.\d+\.\d+)$/.exec(tag);
-    return match ? {
-      tag: tag,
-      version: match[1]
-    } : null;
+    return match ? { tag: tag, version: match[1] } : null;
   }
 };
 
-function latest(repo) {
-  return new Promise((resolve, reject) => {
-    repo.git.tags({ "--sort": "-committerdate" }, (err, tags) => {
-      if (err)
-        return reject(err);
-      for (var i = 0; i < tags.all.length; ++i) {
-        var result = repo.filter(tags.all[i]);
-        if (result !== null) {
-          repo.tag = result.tag;
-          repo.version = result.version;
-          return resolve();
-        };
-      }
-      return reject(Error("no matching tags"));
-    });
+function latest(repo, cb) {
+  simpleGit(repo.path).tags({ "--sort": "-committerdate" }, (err, tags) => {
+    if (err) return cb(err);
+    for (var i = 0; i < tags.all.length; ++i) {
+      var result = repo.filter(tags.all[i]);
+      if (result !== null) {
+        repo.tag = result.tag;
+        repo.version = result.version;
+        return cb(null);
+      };
+    }
+    return cb(Error("no matching tags: " + tags.all.join(", ")));
   });
 }
 
-Promise.all([
-  latest(src),
-  latest(dst)
-]).then(() => {
-  if (process.argv[2] === "tag")
-    console.log(src.tag);
-  else if (semver.gt(src.version, dst.version))
-    console.log(src.version);
-  else
-    console.log(src.version + "-nightly." + dateFormat(Date.UTC(), "yyyymmdd"));
-}).catch(err => {
-  throw err;
+latest(src, err => {
+  if (err) throw err;
+  latest(dst, err => {
+    if (err) throw err;
+    if (process.argv[2] === "tag")
+      console.log(src.tag);
+    else if (semver.gt(src.version, dst.version))
+      console.log(src.version);
+    else
+      console.log(src.version + "-nightly." + dateFormat(Date.UTC(), "yyyymmdd"));
+  });
 });

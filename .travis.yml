@@ -1,5 +1,5 @@
 language: cpp
-dist: trusty # Note that trusty instances are limited to 2 cores, max. 4 gb of memory and 20 gb of hard disk space.
+dist: trusty # limited to 2 cores, max. 4 gb of memory and 20 gb of hard disk space.
 compiler: clang
 git:
   submodules: false
@@ -48,7 +48,6 @@ before_script: # setup ccache, git and emscripten
   timeout 30m make -C $HOME/emscripten-fastcomp/build $MAKEFLAGS &&
   emcc -v &&
   emcc -v &&
-  git fetch &&
   git checkout master &&
   git submodule update --init --remote --merge;
   export RC=$?;
@@ -57,10 +56,6 @@ before_script: # setup ccache, git and emscripten
 script: # build libwabt.js
 - if [ $RC -eq 0 ]; then
     npm install &&
-    cd ./wabt &&
-    git fetch &&
-    git submodule init &&
-    cd .. &&
     VERSION=`node scripts/version` &&
     export VERSION &&
     if [[ $VERSION != *nightly* ]]; then
@@ -70,13 +65,15 @@ script: # build libwabt.js
       unset RELEASE &&
       echo "Building nightly v$VERSION ...";
     fi &&
-    cd ./wabt &&
     if [ $RELEASE ]; then
-      TAG=`node ../scripts/version tag` &&
+      TAG=`node scripts/version tag` &&
       echo "Resetting to $TAG ..." &&
+      cd ./wabt &&
       git reset --hard "$TAG" &&
-      git clean -f;
+      git clean -f &&
+      cd ..;
     fi &&
+    cd ./wabt &&
     cmake . -DCMAKE_TOOLCHAIN_FILE="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake" -DCMAKE_BUILD_TYPE=RELEASE &&
     cmake --build . --config RELEASE --target libwabtjs &&
     cp ./libwabt.js ../index.js &&
