@@ -35,13 +35,14 @@ function latest(repo, cb) {
 
 latest(src, err => {
   if (err) throw err;
-  latest(dst, err => {
-    if (err) throw err;
-    if (process.argv[2] === "tag")
-      console.log(src.tag);
-    else if (semver.gt(src.version, dst.version))
-      console.log(src.version);
-    else
-      console.log(src.version + "-nightly." + dateFormat(Date.UTC(), "yyyymmdd"));
-  });
+  if (process.argv[2] === "tag")
+    console.log(src.tag);
+  else
+    latest(dst, err => {
+      if (err) throw err;
+      if (semver.gt(src.version, dst.version))
+        console.log(src.version);
+      else
+        console.log(src.version + "-nightly." + dateFormat(Date.UTC(), "yyyymmdd"));
+    });
 });
