@@ -13,7 +13,7 @@ $> npm install wabt
 ```
 
 ```js
-var wabt = require("wabt");
+var wabt = require("wabt")();
 
 var wasm = ...; // a buffer holding the contents of a wasm file
 

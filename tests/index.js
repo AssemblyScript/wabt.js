@@ -7,7 +7,7 @@ var test = require("tape");
 var wabt;
 test("requiring wabt", function(test) {
   test.doesNotThrow(function() {
-    wabt = require("..");
+    wabt = require("..")();
   });
   test.end();
 });
