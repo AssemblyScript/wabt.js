@@ -33,6 +33,18 @@ $> npm install wabt@nightly
 
 or you can use one of the [previous versions](https://github.com/AssemblyScript/wabt.js/tags) instead if necessary.
 
+### Usage with a CDN
+
+  * From GitHub via [jsDelivr](https://www.jsdelivr.com):<br />
+    `https://cdn.jsdelivr.net/gh/AssemblyScript/wabt.js@VERSION/index.js`
+  * From npm via [jsDelivr](https://www.jsdelivr.com):<br />
+    `https://cdn.jsdelivr.net/npm/wabt@VERSION/index.js`
+  * From npm via [UNPKG](https://unpkg.com):<br />
+    `https://unpkg.com/wabt@VERSION/index.js`
+
+  Replace `VERSION` with a [specific version](https://github.com/AssemblyScript/wabt.js/releases) or omit it (not recommended in production) to use master/latest.
+
+
 API
 ---
 
