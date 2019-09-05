@@ -14,9 +14,25 @@ test("requiring wabt", function(test) {
 
 var mod;
 test("loading a binary module", function(test) {
-  var buffer = new Uint8Array(fs.readFileSync(__dirname + "/assembly/module.wasm"));
+  var buffer = new Uint8Array(
+    fs.readFileSync(__dirname + "/assembly/module.wasm")
+  );
   test.doesNotThrow(function() {
     mod = wabt.readWasm(buffer, { readDebugNames: true });
+  });
+  test.ok(mod && typeof mod.toBinary === "function", "should return a module");
+  test.end();
+});
+
+test("loading a binary module (with features)", function(test) {
+  var buffer = new Uint8Array(
+    fs.readFileSync(__dirname + "/assembly/module-simd.wasm")
+  );
+  test.doesNotThrow(function() {
+    mod = wabt.readWasm(buffer, {
+      readDebugNames: true,
+      simd: true,
+    });
   });
   test.ok(mod && typeof mod.toBinary === "function", "should return a module");
   test.end();
@@ -39,8 +55,17 @@ test("emitting a module", function(test) {
     text = mod.toText({ foldExprs: true, inlineExport: false });
     binaryRes = mod.toBinary({ write_debug_names: true });
   });
-  test.ok(typeof text === "string" && text.length, "should return a string from calling Module#toText");
-  test.ok(binaryRes && binaryRes.buffer && binaryRes.buffer.length && typeof binaryRes.log === "string", "should return a binary result from calling Module#toBinary");
+  test.ok(
+    typeof text === "string" && text.length,
+    "should return a string from calling Module#toText"
+  );
+  test.ok(
+    binaryRes &&
+      binaryRes.buffer &&
+      binaryRes.buffer.length &&
+      typeof binaryRes.log === "string",
+    "should return a binary result from calling Module#toBinary"
+  );
   // test.strictEqual(text, compText, "should match the text fixture");
   // test.strictEqual(Buffer.compare(binaryRes.buffer, compBinary), 0, "should match the binary fixture");
   test.end();
@@ -58,6 +83,21 @@ test("loading a text (wast) module", function(test) {
   var mod;
   test.doesNotThrow(function() {
     mod = wabt.parseWat("module.wast", str);
+  });
+  test.ok(mod && typeof mod.toBinary === "function", "should return a module");
+  test.doesNotThrow(function() {
+    mod.destroy();
+  }, "should not throw when calling Module#destroy");
+  test.end();
+});
+
+test("loading a text (wast) module with features", function(test) {
+  var str = fs.readFileSync(__dirname + "/assembly/module-simd.wast").toString();
+  var mod;
+  test.doesNotThrow(function() {
+    mod = wabt.parseWat("module-simd.wast", str, {
+      simd: true,
+    });
   });
   test.ok(mod && typeof mod.toBinary === "function", "should return a module");
   test.doesNotThrow(function() {

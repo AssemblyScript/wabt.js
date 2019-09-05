@@ -1,3 +1,19 @@
+// WABT Features. Taken from:
+// https://github.com/WebAssembly/wabt/blob/master/src/feature.def#L25-L35
+interface WasmFeatures {
+  exceptions?: boolean;
+  mutable_globals?: boolean;
+  sat_float_to_int?: boolean;
+  sign_extension?: boolean;
+  simd?: boolean;
+  threads?: boolean;
+  multi_value?: boolean;
+  tail_call?: boolean;
+  bulk_memory?: boolean;
+  reference_types?: boolean;
+  annotations?: boolean;
+}
+
 interface ReadWasmOptions {
   readDebugNames?: boolean;
 }
@@ -31,5 +47,5 @@ declare class WasmModule {
 }
 
 export const ready: Promise<undefined>;
-export function parseWat(filename: string, buffer: string | Uint8Array): WasmModule;
-export function readWasm(buffer: Uint8Array, options: ReadWasmOptions): WasmModule;
+export function parseWat(filename: string, buffer: string | Uint8Array, options?: WasmFeatures): WasmModule;
+export function readWasm(buffer: Uint8Array, options: ReadWasmOptions & WasmFeatures): WasmModule;
