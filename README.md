@@ -48,9 +48,9 @@ or you can use one of the [previous versions](https://github.com/AssemblyScript/
 API
 ---
 
-* **parseWat**(filename: `string`, buffer: `string | Uint8Array`): `WasmModule`<br />
+* **parseWat**(filename: `string`, buffer: `string | Uint8Array`, options?: `WasmFeatures`): `WasmModule`<br />
   Parses a wst source to a module.
-* **readWasm**(buffer: `Uint8Array`, options: `ReadWasmOptions`): `WasmModule`<br />
+* **readWasm**(buffer: `Uint8Array`, options: `ReadWasmOptions & WasmFeatures`): `WasmModule`<br />
   Reads a wasm binaryen to a module.
 
 * **WasmModule**<br />
@@ -96,6 +96,31 @@ API
 
   * **buffer**: `Uint8Array`<br />
     The wasm binary buffer.
-
   * **log**: `string`<br />
     Generated log output.
+
+* **WasmFeatures**<br />
+  Post-MVP WebAssembly features to legalize.
+
+  * **exceptions**: `boolean`<br />
+    Exception handling ([proposal](https://github.com/WebAssembly/exception-handling)).
+  * **mutable_globals**: `boolean`<br />
+    Import/Export mutable globals ([proposal](https://github.com/WebAssembly/mutable-global)).
+  * **sat_float_to_int**: `boolean`<br />
+    Non-trapping Float-to-int Conversions ([proposal](https://github.com/WebAssembly/nontrapping-float-to-int-conversions)).
+  * **sign_extension**: `boolean`<br />
+    Sign-extension operators ([proposal](https://github.com/WebAssembly/sign-extension-ops)).
+  * **simd**: `boolean`<br />
+    128-bit packed SIMD ([proposal](https://github.com/WebAssembly/simd)).
+  * **threads**: `boolean`<br />
+    Threading ([proposal](https://github.com/WebAssembly/threads)).
+  * **multi_value**: `boolean`<br />
+    Multi-value ([proposal](https://github.com/WebAssembly/multi-value)).
+  * **tail_call**: `boolean`<br />
+    Tail Call ([proposal](https://github.com/WebAssembly/tail-call)).
+  * **bulk_memory**: `boolean`<br />
+    Bulk Memory Operations and Conditional Segment Initialization ([proposal](https://github.com/WebAssembly/bulk-memory-operations)).
+  * **reference_types**: `boolean`<br />
+    Reference Types ([proposal](https://github.com/WebAssembly/reference-types)).
+  * **annotations**: `boolean`<br />
+    Custom Annotation Syntax for the Wasm Text Format ([proposal](https://github.com/WebAssembly/annotations)).
