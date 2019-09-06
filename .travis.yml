@@ -1,5 +1,5 @@
 language: cpp
-dist: trusty # limited to 2 cores, max. 4 gb of memory and 20 gb of hard disk space.
+dist: xenial # limited to 2 cores, max. 4 gb of memory and 20 gb of hard disk space.
 compiler: clang
 git:
   submodules: false
@@ -16,7 +16,7 @@ env:
   - CCACHE_SLOPPINESS="pch_defines,time_macros"
   - CCACHE_COMPRESS=1
   - CCACHE_HARDLINK=1
-  - CCACHE_MAXSIZE="256m"
+  - CCACHE_MAXSIZE="256M"
   - LLVM="$HOME/emscripten-fastcomp/build/bin"
   - EMSCRIPTEN_VERSION="incoming"
   - EMSCRIPTEN="$HOME/emscripten"
@@ -24,8 +24,8 @@ env:
   - PATH="$HOME/emscripten:$HOME/cmake/bin:$PATH"
 
 install: # install cmake and node.js
-- mkdir $HOME/cmake && wget -qO- https://cmake.org/files/v3.10/cmake-3.10.1-Linux-x86_64.tar.gz | tar -xzC $HOME/cmake --strip-components 1
-- nvm install 8
+- mkdir $HOME/cmake && wget -qO- https://github.com/Kitware/CMake/releases/download/v3.15.3/cmake-3.15.3-Linux-x86_64.tar.gz | tar -xzC $HOME/cmake --strip-components 1
+- nvm install 10
 
 before_script: # setup ccache, git and emscripten
 - ccache -z -M $CCACHE_MAXSIZE &&
