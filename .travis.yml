@@ -20,6 +20,7 @@ env:
   - LLVM="$HOME/emscripten-fastcomp/build/bin"
   - EMSCRIPTEN_VERSION="incoming"
   - EMSCRIPTEN="$HOME/emscripten"
+  - EMSCRIPTEN_DIR="$EMSCRIPTEN"
   - PATH="$HOME/emscripten:$HOME/cmake/bin:$PATH"
 
 install: # install cmake and node.js
@@ -72,9 +73,8 @@ script: # build libwabt.js
       cd ..;
     fi &&
     cd ./wabt &&
-    cmake . -DCMAKE_TOOLCHAIN_FILE="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake" -DCMAKE_BUILD_TYPE=RELEASE &&
-    cmake --build . --config RELEASE --target libwabtjs &&
-    cp ./libwabt.js ../index.js &&
+    make emscripten-release &&
+    cp ./out/emscripten/Release/libwabt.js ../index.js &&
     cd .. &&
     npm test;
     export RC=$?;
