@@ -55,15 +55,15 @@ after_success: # push to github and publish on npm (intentionally fails for dupl
   else
     echo "Committing nightly ("$VERSION") ...";
     git commit -m "Build ""#"$TRAVIS_BUILD_NUMBER":"" Nightly v"$VERSION" [ci skip]";
+  fi &&
+  git push -u origin master &&
+  echo "Creating tag v$VERSION ..." &&
+  git tag "v"$VERSION &&
+  git push -u origin "v"$VERSION &&
+  if [ $RELEASE ]; then
+    echo "Publishing release ..." &&
+    npm publish;
+  else
+    echo "Publishing nightly ..." &&
+    npm publish --tag nightly;
   fi
-#  git push -u origin master &&
-#  echo "Creating tag v$VERSION ..." &&
-#  git tag "v"$VERSION &&
-#  git push -u origin "v"$VERSION &&
-#  if [ $RELEASE ]; then
-#    echo "Publishing release ..." &&
-#    npm publish;
-#  else
-#    echo "Publishing nightly ..." &&
-#    npm publish --tag nightly;
-#  fi
