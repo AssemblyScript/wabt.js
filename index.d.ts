@@ -46,6 +46,11 @@ declare class WasmModule {
   destroy(): void;
 }
 
-export const ready: Promise<undefined>;
-export function parseWat(filename: string, buffer: string | Uint8Array, options?: WasmFeatures): WasmModule;
-export function readWasm(buffer: Uint8Array, options: ReadWasmOptions & WasmFeatures): WasmModule;
+interface WabtModule {
+  ready: Promise<undefined>
+  parseWat(filename: string, buffer: string | Uint8Array, options?: WasmFeatures): WasmModule;
+  readWasm(buffer: Uint8Array, options: ReadWasmOptions & WasmFeatures): WasmModule;
+}
+
+declare function wabt(): WabtModule
+export = wabt
