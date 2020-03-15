@@ -13,7 +13,7 @@ sudo: required
 services:
 - docker
 before_install:
-- docker run -dit --name emscripten -v $(pwd):$(pwd) trzeci/emscripten:sdk-incoming-64bit bash
+- docker run -dit --name emscripten -v $(pwd):$(pwd) trzeci/emscripten-fastcomp bash
 before_script:
 - git config --global user.email "travis@travis-ci.org" &&
   git config --global user.name "Travis CI" &&
@@ -21,7 +21,8 @@ before_script:
   echo "https://${GH_TOKEN}:@github.com" > .git/credentials &&
   echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > $HOME/.npmrc
 - git checkout master &&
-  git submodule update --init --remote --merge
+  git submodule update --init --remote --merge &&
+  git submodule foreach 'git submodule update --init'
 script: # build libwabt.js
 - npm install &&
   VERSION=`node scripts/version` &&
