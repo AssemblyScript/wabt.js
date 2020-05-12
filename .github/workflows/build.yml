@@ -71,13 +71,12 @@ jobs:
         fi
     - name: "Build wabt.js"
       run: |
-        mkdir ./wabt/build
-        cd ./wabt/build
+        cd ./wabt
         source $HOME/emsdk/emsdk_env.sh
         emcc --version
         make emscripten-release
         cp out/emscripten/Release/libwabt.js ../index.js
-        cd ../..
+        cd ..
     - name: "Test wabt.js"
       run: |
         node ./tests
