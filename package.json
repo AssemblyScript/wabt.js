@@ -14,6 +14,9 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
+    "asbuild:mvp": "asc tests/assembly/module.ts -t tests/assembly/module.wat -b tests/assembly/module.wasm --runtime none",
+    "asbuild:features": "asc tests/assembly/module-features.ts -t tests/assembly/module-features.wat -b tests/assembly/module-features.wasm --runtime none --enable simd",
+    "asbuild": "npm run asbuild:mvp && npm run asbuild:features",
     "test": "node tests"
   },
   "files": [
@@ -24,9 +27,10 @@
     "README.md"
   ],
   "devDependencies": {
+    "assemblyscript": "latest",
     "dateformat": "^3.0.3",
-    "semver": "^7.1.3",
-    "simple-git": "^1.132.0",
-    "tape": "^4.13.2"
+    "semver": "^7.3.2",
+    "simple-git": "^2.4.0",
+    "tape": "^5.0.0"
   }
 }
