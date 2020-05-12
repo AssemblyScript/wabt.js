@@ -1,12 +1,6 @@
 {
-  "extends": "../../assemblyscript/tsconfig.assembly.json",
+  "extends": "../../node_modules/assemblyscript/std/assembly.json",
   "include": [
-    "./**/*.ts",
-    "./**/*.as"
-  ],
-  "assembly": {
-    "noRuntime": true,
-    "outFile": "./module.wasm",
-    "textFile": "./module.wast"
-  }
+    "./**/*.ts"
+  ]
 }

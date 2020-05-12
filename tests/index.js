@@ -26,7 +26,7 @@ test("loading a binary module", function(test) {
 
 test("loading a binary module (with features)", function(test) {
   var buffer = new Uint8Array(
-    fs.readFileSync(__dirname + "/assembly/module-simd.wasm")
+    fs.readFileSync(__dirname + "/assembly/module-features.wasm")
   );
   test.doesNotThrow(function() {
     mod = wabt.readWasm(buffer, {
@@ -46,9 +46,6 @@ test("modifying a module", function(test) {
   test.end();
 });
 
-// var compText = fs.readFileSync(__dirname + "/fixtures/emit.wat", "utf8");
-// var compBinary = new Uint8Array(fs.readFileSync(__dirname + "/fixtures/emit.wasm"));
-
 test("emitting a module", function(test) {
   var text, binaryRes;
   test.doesNotThrow(function() {
@@ -66,8 +63,6 @@ test("emitting a module", function(test) {
       typeof binaryRes.log === "string",
     "should return a binary result from calling Module#toBinary"
   );
-  // test.strictEqual(text, compText, "should match the text fixture");
-  // test.strictEqual(Buffer.compare(binaryRes.buffer, compBinary), 0, "should match the binary fixture");
   test.end();
 });
 
@@ -79,10 +74,10 @@ test("destroying a module", function(test) {
 });
 
 test("loading a text (wast) module", function(test) {
-  var str = fs.readFileSync(__dirname + "/assembly/module.wast").toString();
+  var str = fs.readFileSync(__dirname + "/assembly/module.wat").toString();
   var mod;
   test.doesNotThrow(function() {
-    mod = wabt.parseWat("module.wast", str);
+    mod = wabt.parseWat("module.wat", str);
   });
   test.ok(mod && typeof mod.toBinary === "function", "should return a module");
   test.doesNotThrow(function() {
@@ -92,10 +87,10 @@ test("loading a text (wast) module", function(test) {
 });
 
 test("loading a text (wast) module with features", function(test) {
-  var str = fs.readFileSync(__dirname + "/assembly/module-simd.wast").toString();
+  var str = fs.readFileSync(__dirname + "/assembly/module-features.wat").toString();
   var mod;
   test.doesNotThrow(function() {
-    mod = wabt.parseWat("module-simd.wast", str, {
+    mod = wabt.parseWat("module-features.wat", str, {
       simd: true,
     });
   });
