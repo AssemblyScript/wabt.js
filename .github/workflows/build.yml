@@ -8,21 +8,17 @@ on:
   pull_request:
 jobs:
   build:
-    name: "Build with Emsdk:${{ matrix.emsdk }}"
+    name: "Build with Emsdk"
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || !contains(github.event.head_commit.message, '[ci skip]')
-    strategy:
-      matrix:
-        emsdk: [ "tot", "latest", "latest-fastcomp" ]
-      fail-fast: false
     steps:
     - name: "Set up Emsdk"
       run: |
         mkdir $HOME/emsdk
         git clone --depth 1 https://github.com/emscripten-core/emsdk.git $HOME/emsdk
         $HOME/emsdk/emsdk update-tags
-        $HOME/emsdk/emsdk install ${{ matrix.emsdk }}
-        $HOME/emsdk/emsdk activate ${{ matrix.emsdk }}
+        $HOME/emsdk/emsdk install latest
+        $HOME/emsdk/emsdk activate latest
         echo ::set-env name=PATH::$HOME/emsdk:$PATH
     - name: "Set up CMake"
       run: |
@@ -76,10 +72,33 @@ jobs:
         emcc --version
         make emscripten-release
         cp out/emscripten/Release/libwabt.js ../index.js
+        echo '#!/usr/bin/env node' > ../bin/wasm2c
+        cat out/emscripten/Release/wasm2c.js >> ../bin/wasm2c
+        cp out/emscripten/Release/wasm2wat.js ../bin/wasm2wat
+        cp out/emscripten/Release/wast2json.js ../bin/wast2json
+        cp out/emscripten/Release/wat2wasm.js ../bin/wat2wasm
+        cp out/emscripten/Release/wasm-decompile.js ../bin/wasm-decompile
+        cp out/emscripten/Release/wasm-interp.js ../bin/wasm-interp
+        cp out/emscripten/Release/wasm-objdump.js ../bin/wasm-objdump
+        cp out/emscripten/Release/wasm-opcodecnt.js ../bin/wasm-opcodecnt
+        cp out/emscripten/Release/wasm-strip.js ../bin/wasm-strip
+        cp out/emscripten/Release/wasm-validate.js ../bin/wasm-validate
+        cp out/emscripten/Release/wat-desugar.js ../bin/wat-desugar
         cd ..
     - name: "Test wabt.js"
       run: |
         node ./tests
+        node ./bin/wasm2c --help
+        node ./bin/wasm2wat --help
+        node ./bin/wast2json --help
+        node ./bin/wat2wasm --help
+        node ./bin/wasm-decompile --help
+        node ./bin/wasm-interp --help
+        node ./bin/wasm-objdump --help
+        node ./bin/wasm-opcodecnt --help
+        node ./bin/wasm-strip --help
+        node ./bin/wasm-validate --help
+        node ./bin/wasm-desugar --help
     # - name: "Push changes to GitHub"
     #   if: github.event_name == 'schedule' && matrix.emsdk == 'tot'
     #   run: |

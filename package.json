@@ -13,6 +13,19 @@
   ],
   "main": "index.js",
   "typings": "index.d.ts",
+  "bin": {
+    "wasm2c": "bin/wasm2c",
+    "wasm2wat": "bin/wasm2wat",
+    "wast2json": "bin/wast2json",
+    "wat2wasm": "bin/wat2wasm",
+    "wasm-decompile": "bin/wasm-decompile",
+    "wasm-interp": "bin/wasm-interp",
+    "wasm-objdump": "bin/wasm-objdump",
+    "wasm-opcodecnt": "bin/wasm-opcodecnt",
+    "wasm-strip": "bin/wasm-strip",
+    "wasm-validate": "bin/wasm-validate",
+    "wat-desugar": "bin/wat-desugar"
+  },
   "scripts": {
     "asbuild:mvp": "asc tests/assembly/module.ts -t tests/assembly/module.wat -b tests/assembly/module.wasm --runtime none",
     "asbuild:features": "asc tests/assembly/module-features.ts -t tests/assembly/module-features.wat -b tests/assembly/module-features.wasm --runtime none --enable simd",
