@@ -124,3 +124,25 @@ API
     Reference Types ([proposal](https://github.com/WebAssembly/reference-types)).
   * **annotations**: `boolean`<br />
     Custom Annotation Syntax for the Wasm Text Format ([proposal](https://github.com/WebAssembly/annotations)).
+  * **gc**: `boolean`<br />
+    Garbage collection ([proposal](https://github.com/WebAssembly/gc)).
+
+CLI
+---
+
+Node.js ports of the following command line tools are included in the package as well:
+
+* [wasm2c](https://webassembly.github.io/wabt/doc/wasm2c.1.html) converts a WebAssembly binary file to a C source and header.
+* [wasm2wat](https://webassembly.github.io/wabt/doc/wasm2wat.1.html) translates from WebAssembly binary format to text format.
+* [wat2wasm](https://webassembly.github.io/wabt/doc/wat2wasm.1.html) translates from WebAssembly text format to binary format.
+* [wasm-decompile](https://webassembly.github.io/wabt/doc/wasm-decompile.1.html) decompiles a wasm binary into readable C-like syntax.
+* [wasm-objdump](https://webassembly.github.io/wabt/doc/wasm-objdump.1.html) prints information about a wasm binary. Similiar to objdump.
+* [wasm-opcodecnt](https://webassembly.github.io/wabt/doc/wasm-opcodecnt.1.html) counts opcode usage for instructions.
+* [wasm-strip](https://webassembly.github.io/wabt/doc/wasm-strip.1.html) removes sections of a WebAssembly binary file.
+* [wasm-validate](https://webassembly.github.io/wabt/doc/wasm-validate.1.html) validates a file in WebAssembly binary format.
+
+The tools can also be run adhoc (without explicitly installing the package), for example with:
+
+```
+$> npx -p wabt wasm2wat myModule.wasm -o myModule.wat
+```

@@ -7,7 +7,7 @@ on:
     - master
   pull_request:
 env:
-  WABT_TOOLS: wasm2c wasm2wat wast2json wat2wasm wasm-decompile wasm-interp wasm-objdump wasm-opcodecnt wasm-strip wasm-validate wat-desugar
+  WABT_TOOLS: wasm2c wasm2wat wat2wasm wasm-decompile wasm-objdump wasm-opcodecnt wasm-strip wasm-validate
 jobs:
   build:
     name: "Build with Emsdk"
@@ -99,34 +99,34 @@ jobs:
         for tool in ${{ env.WABT_TOOLS }}; do
           "./bin/$tool" --help
         done
-    # - name: "Push changes to GitHub"
-    #   if: github.event_name == 'schedule' && matrix.emsdk == 'tot'
-    #   run: |
-    #     git add ./wabt ./index.js
-    #     npm version $VERSION --no-git-tag-version --force
-    #     if [ $RELEASE ]; then
-    #       echo "Committing release ("$VERSION") ..."
-    #       git add ./package.json ./package-lock.json
-    #       git commit -m "Release v$VERSION"
-    #     else
-    #       echo "Committing nightly ("$VERSION") ..."
-    #       git commit -m "Nightly v$VERSION [ci skip]"
-    #     fi
-    #     git push -u origin master
-    #     echo "Creating tag v$VERSION ..."
-    #     git tag "v$VERSION"
-    #     git push -u origin "v$VERSION"
-    # - name: "Publish to npm"
-    #   if: github.event_name == 'schedule' && matrix.emsdk == 'tot'
-    #   env:
-    #     NPM_REGISTRY: "registry.npmjs.org"
-    #     NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    #   run: |
-    #     npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}"
-    #     if [ $RELEASE ]; then
-    #       echo "Publishing release ..."
-    #       npm publish
-    #     else
-    #       echo "Publishing nightly ..."
-    #       npm publish --tag nightly
-    #     fi
+    - name: "Push changes to GitHub"
+      if: github.event_name == 'schedule'
+      run: |
+        git add ./wabt ./index.js ./bin/*
+        npm version $VERSION --no-git-tag-version --force
+        if [ $RELEASE ]; then
+          echo "Committing release ("$VERSION") ..."
+          git add ./package.json ./package-lock.json
+          git commit -m "Release v$VERSION"
+        else
+          echo "Committing nightly ("$VERSION") ..."
+          git commit -m "Nightly v$VERSION [ci skip]"
+        fi
+        git push -u origin master
+        echo "Creating tag v$VERSION ..."
+        git tag "v$VERSION"
+        git push -u origin "v$VERSION"
+    - name: "Publish to npm"
+      if: github.event_name == 'schedule'
+      env:
+        NPM_REGISTRY: "registry.npmjs.org"
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: |
+        npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}"
+        if [ $RELEASE ]; then
+          echo "Publishing release ..."
+          npm publish
+        else
+          echo "Publishing nightly ..."
+          npm publish --tag nightly
+        fi
