@@ -88,7 +88,7 @@ jobs:
         emcc --version
         for tool in ${{ env.WABT_TOOLS }}; do
           emmake make "$tool"
-          echo "#!/usr/bin/env node" > "../../bin/$tool"
+          echo '#!/usr/bin/env node' > "../../bin/$tool"
           cat "./$tool.js" >> "../../bin/$tool"
         done
         cd ../..
