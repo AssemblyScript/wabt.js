@@ -142,7 +142,7 @@ Node.js ports of the following command line tools are included in the package as
 * [wasm-strip](https://webassembly.github.io/wabt/doc/wasm-strip.1.html) removes sections of a WebAssembly binary file.
 * [wasm-validate](https://webassembly.github.io/wabt/doc/wasm-validate.1.html) validates a file in WebAssembly binary format.
 
-The tools can also be run adhoc (without explicitly installing the package), for example with:
+The tools can also be run ad hoc (without explicitly installing the package), for example with:
 
 ```
 $> npx -p wabt wasm2wat myModule.wasm -o myModule.wat
