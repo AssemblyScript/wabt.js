@@ -67,7 +67,7 @@ jobs:
           echo "Building nightly v$VERSION ...";
           echo ::set-env name=RELEASE::
         fi
-    - name: "Compile"
+    - name: "Build wabt.js"
       run: |
         mkdir -p ./wabt/build/
         cd ./wabt/build
@@ -76,17 +76,23 @@ jobs:
         emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
         emmake make libwabtjs
         cp ./libwabt.js ../../index.js
+        cd ../..
+    - name: "Test wabt.js"
+      run: |
+        node ./tests
+    - name: "Build tools"
+      run: |
+        cd ./wabt/build
+        source $HOME/emsdk/emsdk_env.sh
+        emcc --version
         for tool in ${{ env.WABT_TOOLS }}; do
           emmake make "$tool"
-          echo "#!/usr/bin/env node" > "../bin/$tool"
+          echo "#!/usr/bin/env node" > "../../bin/$tool"
           cat "./$tool.js" >> "../../bin/$tool"
         done
         cd ../..
         chmod +x ./bin/*
         node scripts/update-tools ${{ env.WABT_TOOLS }}
-    - name: "Test wabt.js"
-      run: |
-        node ./tests
     - name: "Test tools"
       run: |
         for tool in ${{ env.WABT_TOOLS }}; do
