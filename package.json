@@ -13,6 +13,17 @@
   ],
   "main": "index.js",
   "typings": "index.d.ts",
+  "bin": {
+    "wasm2c": "bin/wasm2c",
+    "wasm2wat": "bin/wasm2wat",
+    "wat2wasm": "bin/wat2wasm",
+    "wasm-decompile": "bin/wasm-decompile",
+    "wasm-interp": "bin/wasm-interp",
+    "wasm-objdump": "bin/wasm-objdump",
+    "wasm-opcodecnt": "bin/wasm-opcodecnt",
+    "wasm-strip": "bin/wasm-strip",
+    "wasm-validate": "bin/wasm-validate"
+  },
   "scripts": {
     "asbuild:mvp": "asc tests/assembly/module.ts -t tests/assembly/module.wat -b tests/assembly/module.wasm --runtime none",
     "asbuild:features": "asc tests/assembly/module-features.ts -t tests/assembly/module-features.wat -b tests/assembly/module-features.wasm --runtime none --enable simd",
@@ -24,13 +35,14 @@
     "index.d.ts",
     "package.json",
     "package-lock.json",
+    "bin/*",
     "README.md"
   ],
   "devDependencies": {
-    "assemblyscript": "latest",
+    "assemblyscript": "^0.12.3",
     "dateformat": "^3.0.3",
     "semver": "^7.3.2",
-    "simple-git": "^2.4.0",
-    "tape": "^5.0.0"
+    "simple-git": "^2.8.0",
+    "tape": "^5.0.1"
   }
 }

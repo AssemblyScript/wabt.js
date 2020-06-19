@@ -13,25 +13,25 @@ $> npm install wabt
 ```
 
 ```js
-var wabt = require("wabt")();
+require("wabt")().then(wabt => {
+  var wasm = ...; // a buffer holding the contents of a wasm file
 
-var wasm = ...; // a buffer holding the contents of a wasm file
+  var myModule = wabt.readWasm(wasm, { readDebugNames: true });
+  myModule.applyNames();
 
-var myModule = wabt.readWasm(wasm, { readDebugNames: true });
-myModule.applyNames();
+  var wast = myModule.toText({ foldExprs: false, inlineExport: false });
 
-var wast = myModule.toText({ foldExprs: false, inlineExport: false });
-
-console.log(wast);
+  console.log(wast);
+});
 ```
 
 The buildbot also publishes nightly versions once a day if there have been changes. The latest nightly can be installed through
 
 ```
-$> npm install wabt@nightly
+$> npm install --save-exact wabt@nightly
 ```
 
-or you can use one of the [previous versions](https://github.com/AssemblyScript/wabt.js/tags) instead if necessary.
+or you can use one of the [previous versions](https://github.com/AssemblyScript/wabt.js/tags) instead if necessary. Note the `--save-exact` when using a nightly.
 
 ### Usage with a CDN
 
@@ -49,9 +49,9 @@ API
 ---
 
 * **parseWat**(filename: `string`, buffer: `string | Uint8Array`, options?: `WasmFeatures`): `WasmModule`<br />
-  Parses a wst source to a module.
+  Parses a WebAssembly text format source to a module.
 * **readWasm**(buffer: `Uint8Array`, options: `ReadWasmOptions & WasmFeatures`): `WasmModule`<br />
-  Reads a wasm binaryen to a module.
+  Reads a WebAssembly binary to a module.
 
 * **WasmModule**<br />
   A class representing a WebAssembly module.
@@ -124,3 +124,26 @@ API
     Reference Types ([proposal](https://github.com/WebAssembly/reference-types)).
   * **annotations**: `boolean`<br />
     Custom Annotation Syntax for the Wasm Text Format ([proposal](https://github.com/WebAssembly/annotations)).
+  * **gc**: `boolean`<br />
+    Garbage collection ([proposal](https://github.com/WebAssembly/gc)).
+
+CLI
+---
+
+Node.js ports of the following command line tools are included in the package as well:
+
+* [wasm2c](https://webassembly.github.io/wabt/doc/wasm2c.1.html) converts a WebAssembly binary file to a C source and header.
+* [wasm2wat](https://webassembly.github.io/wabt/doc/wasm2wat.1.html) translates from WebAssembly binary format to text format.
+* [wat2wasm](https://webassembly.github.io/wabt/doc/wat2wasm.1.html) translates from WebAssembly text format to binary format.
+* [wasm-decompile](https://webassembly.github.io/wabt/doc/wasm-decompile.1.html) decompiles a wasm binary into readable C-like syntax.
+* [wasm-interp](https://webassembly.github.io/wabt/doc/wasm-interp.1.html) decodes and runs a WebAssembly binary file using a stack-based interpreter.
+* [wasm-objdump](https://webassembly.github.io/wabt/doc/wasm-objdump.1.html) prints information about a wasm binary. Similiar to objdump.
+* [wasm-opcodecnt](https://webassembly.github.io/wabt/doc/wasm-opcodecnt.1.html) counts opcode usage for instructions.
+* [wasm-strip](https://webassembly.github.io/wabt/doc/wasm-strip.1.html) removes sections of a WebAssembly binary file.
+* [wasm-validate](https://webassembly.github.io/wabt/doc/wasm-validate.1.html) validates a file in WebAssembly binary format.
+
+The tools can also be run ad hoc (without explicitly installing the package), for example with:
+
+```
+$> npx -p wabt wasm2wat myModule.wasm -o myModule.wat
+```

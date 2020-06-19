@@ -1,0 +1,132 @@
+name: Build
+on:
+  schedule:
+  - cron: '0 0 * * *'
+  push:
+    branches:
+    - master
+  pull_request:
+env:
+  WABT_TOOLS: wasm2c wasm2wat wat2wasm wasm-decompile wasm-interp wasm-objdump wasm-opcodecnt wasm-strip wasm-validate
+jobs:
+  build:
+    name: "Build with Emsdk"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || !contains(github.event.head_commit.message, '[ci skip]')
+    steps:
+    - name: "Set up Emsdk"
+      run: |
+        mkdir $HOME/emsdk
+        git clone --depth 1 https://github.com/emscripten-core/emsdk.git $HOME/emsdk
+        $HOME/emsdk/emsdk update-tags
+        $HOME/emsdk/emsdk install latest
+        $HOME/emsdk/emsdk activate latest
+        echo ::set-env name=PATH::$HOME/emsdk:$PATH
+    - name: "Set up CMake"
+      run: |
+        mkdir $HOME/cmake
+        wget -qO- https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0-Linux-x86_64.tar.gz | tar -xzC $HOME/cmake --strip-components 1
+        echo ::set-env name=PATH::$HOME/cmake/bin:$PATH
+    - name: "Check out repository"
+      uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: "Set up repository"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git remote set-url origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+        git fetch origin
+        if [ -z "$GITHUB_HEAD_REF" ]; then
+          # If not a PR, undo detached head
+          git checkout "${GITHUB_REF:11}"
+        fi
+        git submodule update --init --remote --merge
+        git submodule foreach 'git submodule update --init'
+        cd ./wabt
+        git log -n1
+        cd ..
+    - name: "Determine version"
+      run: |
+        npm install
+        VERSION=`node scripts/version`
+        echo ::set-env name=VERSION::$VERSION
+        if [[ $VERSION != *nightly* ]]; then
+          echo "Building release v$VERSION ...";
+          TAG=`node scripts/version tag`
+          echo "Resetting to $TAG ..."
+          cd ./wabt
+          git reset --hard "$TAG"
+          git clean -f
+          git log -n1
+          cd ..
+          echo ::set-env name=RELEASE::1
+        else
+          echo "Building nightly v$VERSION ...";
+          echo ::set-env name=RELEASE::
+        fi
+    - name: "Build wabt.js"
+      run: |
+        mkdir -p ./wabt/build/
+        cd ./wabt/build
+        source $HOME/emsdk/emsdk_env.sh
+        emcc --version
+        emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
+        emmake make libwabtjs
+        cp ./libwabt.js ../../index.js
+        cd ../..
+    - name: "Test wabt.js"
+      run: |
+        node ./tests
+    - name: "Build tools"
+      run: |
+        mkdir -p ./bin
+        cd ./wabt/build
+        source $HOME/emsdk/emsdk_env.sh
+        emcc --version
+        for tool in ${{ env.WABT_TOOLS }}; do
+          emmake make "$tool"
+          echo '#!/usr/bin/env node' > "../../bin/$tool"
+          cat "./$tool.js" >> "../../bin/$tool"
+        done
+        cd ../..
+        chmod +x ./bin/*
+        node scripts/update-tools ${{ env.WABT_TOOLS }}
+    - name: "Test tools"
+      run: |
+        for tool in ${{ env.WABT_TOOLS }}; do
+          "./bin/$tool" --help
+        done
+    - name: "Push changes to GitHub"
+      if: github.event_name == 'schedule'
+      run: |
+        git add ./wabt ./index.js ./bin/*
+        npm version $VERSION --no-git-tag-version --force
+        if [ $RELEASE ]; then
+          echo "Committing release ("$VERSION") ..."
+          git add ./package.json ./package-lock.json
+          git commit -m "Release v$VERSION"
+        else
+          echo "Committing nightly ("$VERSION") ..."
+          git commit -m "Nightly v$VERSION [ci skip]"
+        fi
+        git push -u origin master
+        echo "Creating tag v$VERSION ..."
+        git tag "v$VERSION"
+        git push -u origin "v$VERSION"
+    - name: "Publish to npm"
+      if: github.event_name == 'schedule'
+      env:
+        NPM_REGISTRY: "registry.npmjs.org"
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: |
+        npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}"
+        if [ $RELEASE ]; then
+          echo "Publishing release ..."
+          npm publish
+        else
+          echo "Publishing nightly ..."
+          npm publish --tag nightly
+        fi
