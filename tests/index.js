@@ -67,7 +67,7 @@ require("..")().then(wabt => {
     test.end();
   });
 
-  test("loading a text (wast) module", function(test) {
+  test("loading a text (wat) module", function(test) {
     var str = fs.readFileSync(__dirname + "/assembly/module.wat").toString();
     var mod;
     test.doesNotThrow(function() {
@@ -80,7 +80,7 @@ require("..")().then(wabt => {
     test.end();
   });
 
-  test("loading a text (wast) module with features", function(test) {
+  test("loading a text (wat) module with features", function(test) {
     var str = fs.readFileSync(__dirname + "/assembly/module-features.wat").toString();
     var mod;
     test.doesNotThrow(function() {
