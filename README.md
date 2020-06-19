@@ -136,6 +136,7 @@ Node.js ports of the following command line tools are included in the package as
 * [wasm2wat](https://webassembly.github.io/wabt/doc/wasm2wat.1.html) translates from WebAssembly binary format to text format.
 * [wat2wasm](https://webassembly.github.io/wabt/doc/wat2wasm.1.html) translates from WebAssembly text format to binary format.
 * [wasm-decompile](https://webassembly.github.io/wabt/doc/wasm-decompile.1.html) decompiles a wasm binary into readable C-like syntax.
+* [wasm-interp](https://webassembly.github.io/wabt/doc/wasm-interp.1.html) decodes and runs a WebAssembly binary file using a stack-based interpreter.
 * [wasm-objdump](https://webassembly.github.io/wabt/doc/wasm-objdump.1.html) prints information about a wasm binary. Similiar to objdump.
 * [wasm-opcodecnt](https://webassembly.github.io/wabt/doc/wasm-opcodecnt.1.html) counts opcode usage for instructions.
 * [wasm-strip](https://webassembly.github.io/wabt/doc/wasm-strip.1.html) removes sections of a WebAssembly binary file.
