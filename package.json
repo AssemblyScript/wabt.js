@@ -39,10 +39,10 @@
     "README.md"
   ],
   "devDependencies": {
-    "assemblyscript": "latest",
+    "assemblyscript": "^0.12.3",
     "dateformat": "^3.0.3",
     "semver": "^7.3.2",
-    "simple-git": "^2.4.0",
-    "tape": "^5.0.0"
+    "simple-git": "^2.8.0",
+    "tape": "^5.0.1"
   }
 }
