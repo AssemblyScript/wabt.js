@@ -82,6 +82,7 @@ jobs:
         node ./tests
     - name: "Build tools"
       run: |
+        mkdir -p ./bin
         cd ./wabt/build
         source $HOME/emsdk/emsdk_env.sh
         emcc --version
