@@ -13,25 +13,25 @@ $> npm install wabt
 ```
 
 ```js
-var wabt = require("wabt")();
+require("wabt")().then(wabt => {
+  var wasm = ...; // a buffer holding the contents of a wasm file
 
-var wasm = ...; // a buffer holding the contents of a wasm file
+  var myModule = wabt.readWasm(wasm, { readDebugNames: true });
+  myModule.applyNames();
 
-var myModule = wabt.readWasm(wasm, { readDebugNames: true });
-myModule.applyNames();
+  var wast = myModule.toText({ foldExprs: false, inlineExport: false });
 
-var wast = myModule.toText({ foldExprs: false, inlineExport: false });
-
-console.log(wast);
+  console.log(wast);
+});
 ```
 
 The buildbot also publishes nightly versions once a day if there have been changes. The latest nightly can be installed through
 
 ```
-$> npm install wabt@nightly
+$> npm install --save-exact wabt@nightly
 ```
 
-or you can use one of the [previous versions](https://github.com/AssemblyScript/wabt.js/tags) instead if necessary.
+or you can use one of the [previous versions](https://github.com/AssemblyScript/wabt.js/tags) instead if necessary. Note the `--save-exact` when using a nightly.
 
 ### Usage with a CDN
 

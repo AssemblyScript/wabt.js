@@ -69,27 +69,28 @@ jobs:
         fi
     - name: "Compile"
       run: |
-        cd ./wabt
+        mkdir -p ./wabt/build/
+        cd ./wabt/build
         source $HOME/emsdk/emsdk_env.sh
         emcc --version
-        make emscripten-release
-        cp out/emscripten/Release/libwabt.js ../index.js
-        mkdir -p ../bin/
-        rm -f ../bin/*
-        for tool in '${{ env.WABT_TOOLS }}'; do
-          echo '#!/usr/bin/env node' > ../bin/$tool
-          cat out/emscripten/Release/$tool.js >> ../bin/$tool
+        emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
+        emmake make libwabtjs
+        cp ./libwabt.js ../../index.js
+        for tool in ${{ env.WABT_TOOLS }}; do
+          emmake make "$tool"
+          echo "#!/usr/bin/env node" > "../bin/$tool"
+          cat "./$tool.js" >> "../../bin/$tool"
         done
-        chmod +x ../bin/*
-        cd ..
-        node scripts/update-tools "${{ env.WABT_TOOLS }}"
+        cd ../..
+        chmod +x ./bin/*
+        node scripts/update-tools ${{ env.WABT_TOOLS }}
     - name: "Test wabt.js"
       run: |
         node ./tests
     - name: "Test tools"
       run: |
-        for tool in '${{ env.WABT_TOOLS }}'; do
-          ./bin/$tool --help
+        for tool in ${{ env.WABT_TOOLS }}; do
+          "./bin/$tool" --help
         done
     # - name: "Push changes to GitHub"
     #   if: github.event_name == 'schedule' && matrix.emsdk == 'tot'
