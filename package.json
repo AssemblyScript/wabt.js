@@ -37,6 +37,7 @@
     "index.d.ts",
     "package.json",
     "package-lock.json",
+    "bin/*",
     "README.md"
   ],
   "devDependencies": {

@@ -75,13 +75,14 @@ jobs:
         make emscripten-release
         cp out/emscripten/Release/libwabt.js ../index.js
         mkdir -p ../bin/
-        rm ../bin/*
+        rm -f ../bin/*
         for tool in '${{ env.WABT_TOOLS }}'; do
           echo '#!/usr/bin/env node' > ../bin/$tool
           cat out/emscripten/Release/$tool.js >> ../bin/$tool
         done
         chmod +x ../bin/*
         cd ..
+        node scripts/update-tools "${{ env.WABT_TOOLS }}"
     - name: "Test wabt.js"
       run: |
         node ./tests

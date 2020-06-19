@@ -49,9 +49,9 @@ API
 ---
 
 * **parseWat**(filename: `string`, buffer: `string | Uint8Array`, options?: `WasmFeatures`): `WasmModule`<br />
-  Parses a wst source to a module.
+  Parses a WebAssembly text format source to a module.
 * **readWasm**(buffer: `Uint8Array`, options: `ReadWasmOptions & WasmFeatures`): `WasmModule`<br />
-  Reads a wasm binaryen to a module.
+  Reads a WebAssembly binary to a module.
 
 * **WasmModule**<br />
   A class representing a WebAssembly module.
