@@ -4,7 +4,7 @@ on:
   - cron: '0 0 * * *'
   push:
     branches:
-    - master
+    - main
   pull_request:
 env:
   WABT_TOOLS: wasm2c wasm2wat wat2wasm wasm-decompile wasm-interp wasm-objdump wasm-opcodecnt wasm-strip wasm-validate
@@ -112,7 +112,7 @@ jobs:
           echo "Committing nightly ("$VERSION") ..."
           git commit -m "Nightly v$VERSION [ci skip]"
         fi
-        git push -u origin master
+        git push -u origin main
         echo "Creating tag v$VERSION ..."
         git tag "v$VERSION"
         git push -u origin "v$VERSION"
