@@ -102,7 +102,7 @@ API
     Generated log output.
 
 * **WasmFeatures**<br />
-  Post-MVP WebAssembly features to legalize.
+  WebAssembly features to legalize. Finished features are enabled by default.
 
   * **exceptions**: `boolean`<br />
     Exception handling ([proposal](https://github.com/WebAssembly/exception-handling)).
@@ -116,6 +116,8 @@ API
     128-bit packed SIMD ([proposal](https://github.com/WebAssembly/simd)).
   * **threads**: `boolean`<br />
     Threading ([proposal](https://github.com/WebAssembly/threads)).
+  * **function_references**: `boolean`<br />
+    Typed function references ([proposal](https://github.com/WebAssembly/function-references)).
   * **multi_value**: `boolean`<br />
     Multi-value ([proposal](https://github.com/WebAssembly/multi-value)).
   * **tail_call**: `boolean`<br />
@@ -126,8 +128,16 @@ API
     Reference Types ([proposal](https://github.com/WebAssembly/reference-types)).
   * **annotations**: `boolean`<br />
     Custom Annotation Syntax for the Wasm Text Format ([proposal](https://github.com/WebAssembly/annotations)).
+  * **code_metadata**: `boolean`<br />
+    Code metadata ([convention](https://github.com/WebAssembly/tool-conventions/blob/main/CodeMetadata.md)).
   * **gc**: `boolean`<br />
     Garbage collection ([proposal](https://github.com/WebAssembly/gc)).
+  * **memory64**: `boolean`<br />
+    64-bit memory ([proposal](https://github.com/WebAssembly/memory64)).
+  * **extended_const**: `boolean`<br />
+    Extended constant expressions ([proposal](https://github.com/WebAssembly/extended-const)).
+  * **relaxed_simd**: `boolean`<br />
+    Relaxed SIMD ([proposal](https://github.com/WebAssembly/relaxed-simd)).
 
 CLI
 ---
