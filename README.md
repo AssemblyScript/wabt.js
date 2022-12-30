@@ -3,7 +3,7 @@ wabt.js
 
 **wabt.js** is a port of [WABT](https://github.com/WebAssembly/wabt) to the Web, allowing you to manipulate WebAssembly modules using a JavaScript API.
 
-<a href="https://github.com/AssemblyScript/wabt.js/actions?query=workflow%3ABuild"><img src="https://img.shields.io/github/workflow/status/AssemblyScript/wabt.js/Build/main?label=build&logo=github" alt="Build status" /></a>
+<a href="https://github.com/AssemblyScript/wabt.js/actions?query=workflow%3ABuild"><img src="https://img.shields.io/github/actions/workflow/status/AssemblyScript/wabt.js/build.yml?branch=main&label=build&logo=github" alt="Build status" /></a>
 <a href="https://www.npmjs.com/package/wabt"><img src="https://img.shields.io/npm/v/wabt.svg?label=latest&color=007acc&logo=npm" alt="npm version" /></a>
 <a href="https://www.npmjs.com/package/wabt"><img src="https://img.shields.io/npm/v/wabt/nightly.svg?label=nightly&color=007acc&logo=npm" alt="npm nightly version" /></a>
 
