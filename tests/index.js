@@ -25,7 +25,6 @@ require("..")().then(wabt => {
     test.doesNotThrow(function() {
       mod = wabt.readWasm(buffer, {
         readDebugNames: true,
-        simd: true,
       });
     });
     test.ok(mod && typeof mod.toBinary === "function", "should return a module");
@@ -84,9 +83,7 @@ require("..")().then(wabt => {
     var str = fs.readFileSync(__dirname + "/assembly/module-features.wat").toString();
     var mod;
     test.doesNotThrow(function() {
-      mod = wabt.parseWat("module-features.wat", str, {
-        simd: true,
-      });
+      mod = wabt.parseWat("module-features.wat", str);
     });
     test.ok(mod && typeof mod.toBinary === "function", "should return a module");
     test.doesNotThrow(function() {

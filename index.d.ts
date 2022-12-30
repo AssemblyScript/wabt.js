@@ -12,6 +12,8 @@ interface WasmFeatures { // see: https://github.com/WebAssembly/wabt/blob/main/s
   simd?: boolean;
   /** Threading support. */
   threads?: boolean;
+  /** Typed function references. */
+  function_references?: boolean;
   /** Multi-value. */
   multi_value?: boolean;
   /** Tail-call support. */
@@ -22,8 +24,16 @@ interface WasmFeatures { // see: https://github.com/WebAssembly/wabt/blob/main/s
   reference_types?: boolean;
   /** Custom annotation syntax. */
   annotations?: boolean;
+  /** Code metadata. */
+  code_metadata?: boolean;
   /** Garbage collection. */
   gc?: boolean;
+  /** 64-bit memory */
+  memory64?: boolean;
+  /** Extended constant expressions. */
+  extended_const?: boolean;
+  /** Relaxed SIMD. */
+  relaxed_simd?: boolean;
 }
 
 /** Options modifying the behavior of `readWasm`. */
