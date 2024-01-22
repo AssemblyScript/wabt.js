@@ -75,7 +75,7 @@ jobs:
         source $HOME/emsdk/emsdk_env.sh
         emcc --version
         emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
-        emmake make libwabtjs
+        emmake make libwabtjs -j $(nproc)
         cp ./libwabt.js ../../index.js
         cd ../..
     - name: "Test wabt.js"
