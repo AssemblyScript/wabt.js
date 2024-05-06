@@ -20,7 +20,7 @@
     "wasm-decompile": "bin/wasm-decompile",
     "wasm-interp": "bin/wasm-interp",
     "wasm-objdump": "bin/wasm-objdump",
-    "wasm-opcodecnt": "bin/wasm-opcodecnt",
+    "wasm-stats": "bin/wasm-stats",
     "wasm-strip": "bin/wasm-strip",
     "wasm-validate": "bin/wasm-validate"
   },
