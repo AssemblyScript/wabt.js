@@ -1,7 +1,7 @@
 {
   "name": "wabt",
   "description": "JavaScript version of WABT, The WebAssembly Binary Toolkit.",
-  "version": "1.0.32",
+  "version": "1.0.35",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
