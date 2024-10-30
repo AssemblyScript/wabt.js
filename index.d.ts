@@ -34,6 +34,8 @@ interface WasmFeatures { // see: https://github.com/WebAssembly/wabt/blob/main/s
   extended_const?: boolean;
   /** Relaxed SIMD. */
   relaxed_simd?: boolean;
+  /** Multi memory. */
+  multi_memory?: boolean;
 }
 
 /** Options modifying the behavior of `readWasm`. */
