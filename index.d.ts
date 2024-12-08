@@ -1,5 +1,5 @@
 /** Post-MVP WebAssembly features to legalize. */
-interface WasmFeatures { // see: https://github.com/WebAssembly/wabt/blob/main/src/feature.def#L25-L35
+interface WasmFeatures { // see: https://github.com/WebAssembly/wabt/blob/main/include/wabt/feature.def#L25
   /** Experimental exception handling. */
   exceptions?: boolean;
   /** Import/export mutable globals. */
