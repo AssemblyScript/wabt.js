@@ -31,6 +31,24 @@ require("..")().then(wabt => {
     test.end();
   });
 
+  test("loading an invalid binary module", function (test) {
+    var buffer = new Uint8Array(
+      fs.readFileSync(__dirname + "/assembly/module-features.wasm")
+    );
+    buffer[buffer.length - 1] = 0x00; // corrupt the last byte
+    test.throws(function() {
+      mod = wabt.readWasm(buffer, {});
+    }, /function body must end with END opcode/);
+    // Specifying `check: true` allows an invalid module to be loaded.
+    test.doesNotThrow(function() {
+      mod = wabt.readWasm(buffer, {
+        check: false
+      });
+    });
+    test.ok(mod && typeof mod.toBinary === "function", "should return a module");
+    test.end();
+  });
+
   test("modifying a module", function(test) {
     test.doesNotThrow(function() {
       mod.generateNames();
