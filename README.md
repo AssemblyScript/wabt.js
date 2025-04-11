@@ -78,6 +78,8 @@ API
 
    * **readDebugNames**: `boolean`<br />
      Reads textual names from the name section.
+   * **check**: `boolean`<br/>
+     Check for invalid modules (default: true).
 
 * **ToTextOptions**<br />
   Options modifying the behavior of `WasmModule#toText`.

@@ -40,6 +40,9 @@ interface WasmFeatures { // see: https://github.com/WebAssembly/wabt/blob/main/s
 interface ReadWasmOptions {
   /** Reads textual names from the name section. */
   readDebugNames?: boolean;
+
+  /** Check for invalid modules (default is true). */
+  check?: boolean;
 }
 
 /** Options modifying the behavior of `WasmModule#toText`. */
