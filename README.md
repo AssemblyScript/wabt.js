@@ -78,7 +78,7 @@ API
 
    * **readDebugNames**: `boolean`<br />
      Reads textual names from the name section.
-   * **check:** `boolean`<br/>
+   * **check**: `boolean`<br/>
      Check for invalid modules (default: true).
 
 * **ToTextOptions**<br />
