@@ -71,7 +71,7 @@ interface ToBinaryResult {
 declare class WasmModule {
   constructor(module_addr: number);
   /** Validates the module. Throws if not valid. */
-  validate(): void;
+  validate(options?: WasmFeatures): void;
   /** Resolves names to indexes. */
   resolveNames(): void;
   /** Generates textual names for function types, globals, labels etc. */
